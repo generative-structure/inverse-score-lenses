@@ -1,0 +1,4 @@
+section,representation,I_S_joint,I_plant_joint,I_joint,I_plant_given_S,I_S_given_plant,synergy_J_route1,synergy_J_route2,coherence_gap,marginal_diff,conditional_diff
+C,autopsy_mix,3.6052,0.2899,4.0057,0.4005,3.7157,0.1105,0.1105,0.0,3.3153,3.3153
+C,structural,3.8276,0.5262,4.4139,0.5863,3.8877,0.0601,0.0601,0.0,3.3014,3.3014
+C,overlap_profile,4.0022,0.5176,4.6205,0.6183,4.1029,0.1007,0.1007,0.0,3.4846,3.4846

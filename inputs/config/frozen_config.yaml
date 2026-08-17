@@ -1,0 +1,344 @@
+# score-lenses FROZEN CONFIG — Gate S (Arm S), frozen 2026-07-21.
+# Frozen at the `armS-gate-closed` tag together with preregistration.md.
+# After that tag, changes require a logged DECISIONS.md amendment
+# justified as correcting an implementation error, never a result. The
+# sealed plant's DGP implementation (sealed/PROTOCOL.md step 5) is the
+# sole pre-declared post-gate code addition.
+
+meta:
+  frozen: true
+  gate: armS
+  date: 2026-07-21
+  source: build_config.yaml as of commit 1d899ee
+
+execution:
+  n_workers: 14                # A2: Apple M4 Max, 16 cores, 64 GB
+
+population:
+  n: 5000
+  eps: 0.01
+  n_vendors: 400
+  n_days: 365
+  min_amount_cents: 100        # amounts are integer cents, never floats
+  host:
+    weights: {generic: 0.55, round: 0.20, vocab: 0.15, psych: 0.10}
+    generic: {log_mean: 10.2, log_sd: 1.1}
+    round:
+      bases_cents: [5000, 10000, 25000, 50000, 100000, 250000, 500000]
+      mult_low: 1
+      mult_high: 20            # exclusive, as np.random.integers
+    vocab: {n_values: 25, log_mean: 10.0, log_sd: 0.9}
+    psych: {log_mean: 9.8, log_sd: 1.0, endings: [49, 95, 98, 99]}
+  host_variants:               # M2c host-robustness sweep; weights only,
+    rule_sparse:               # all other host params inherited
+      weights: {generic: 0.85, round: 0.05, vocab: 0.05, psych: 0.05}
+    heavy_round:
+      weights: {generic: 0.35, round: 0.40, vocab: 0.15, psych: 0.10}
+
+plants:
+  MAG:   {log_mean: 16.8, log_sd: 0.5}   # re-parameterized 2026-07-21, see DECISIONS
+  RULE:  {rate_cents: 991, mult_low: 50, mult_high: 3000}
+  BUNCH: {threshold_cents: 1000000, band_frac: 0.08}
+  COPY:  {}
+  "NULL": {}   # quoted: bare NULL is YAML null
+
+experiment:                    # pilot-scale defaults; exp_s1 has its own block
+  plants: [MAG, RULE, BUNCH, COPY, "NULL"]
+  replicates: 5
+  k: 50
+
+# A1.6 exploratory dimension sweep (NOT part of the confirmatory design;
+# the three named confirmatory hosts are unchanged). Baseline = this
+# file's population block; each perturbation is a one-at-a-time override
+# (dotted path -> value), two levels per dimension, 8 dimensions.
+dimension_sweep:
+  plants: [MAG, RULE, BUNCH, COPY, "NULL"]
+  replicates: 5
+  eps: 0.01
+  perturbations:
+    weights_rule_sparse:  {"population.host.weights": {generic: 0.85, round: 0.05, vocab: 0.05, psych: 0.05}}
+    weights_heavy_round:  {"population.host.weights": {generic: 0.35, round: 0.40, vocab: 0.15, psych: 0.10}}
+    tail_sd_low:          {"population.host.generic.log_sd": 0.7}
+    tail_sd_high:         {"population.host.generic.log_sd": 1.6}
+    vocab_small:          {"population.host.vocab.n_values": 8}
+    vocab_large:          {"population.host.vocab.n_values": 100}
+    coupling_low:         {"population.host.vendor_coupling": 0.3}
+    coupling_high:        {"population.host.vendor_coupling": 0.7}
+    grid_coarse:          {"population.host.round.bases_cents": [10000, 100000, 1000000]}
+    grid_fine:            {"population.host.round.bases_cents": [100, 500, 1000, 5000, 10000, 25000, 50000, 100000, 250000, 500000]}
+    n_small:              {"population.n": 2500}
+    n_large:              {"population.n": 10000}
+    dup_low:              {"population.host.dup_rate": 0.02}
+    dup_high:             {"population.host.dup_rate": 0.10}
+    vendors_few:          {"population.n_vendors": 50}
+    vendors_many:         {"population.n_vendors": 2000}
+  # A2.2 space sample: joint Latin-hypercube over the declared ranges.
+  # Weights are parameterized by the generic share g; the remaining mass
+  # is split round:vocab:psych = 4:3:2 (the baseline proportions).
+  space_sample:
+    n_hosts: 64
+    replicates: 5
+    ranges:
+      generic_weight: [0.35, 0.85]
+      generic_log_sd: [0.7, 1.6]
+      vocab_n_values: [8, 100]         # int
+      vendor_coupling: [0.0, 0.7]
+      grid_bases_set: [coarse, default, fine]   # discrete
+      n: [2500, 10000]                 # int, rounded to 100
+      dup_rate: [0.0, 0.10]
+      n_vendors: [50, 2000]            # int, log-uniform
+    grid_bases_sets:
+      coarse:  [10000, 100000, 1000000]
+      default: [5000, 10000, 25000, 50000, 100000, 250000, 500000]
+      fine:    [100, 500, 1000, 5000, 10000, 25000, 50000, 100000, 250000, 500000]
+
+# A2.4 N-scaling arm: full grid at four N, K evaluated two ways on the
+# same scored populations: fixed K=50 (institutional case) and
+# proportional K = 0.01*N.
+n_scaling:
+  n_values: [2500, 5000, 20000, 50000]
+  k_fixed: 50
+  k_prop: 0.01
+  plants: [MAG, RULE, BUNCH, COPY, "NULL"]
+  replicates: 10
+  eps: 0.01
+  fit_subsample_at: 20000      # OCSVM/MCD subsample-fit when N >= this
+  fit_subsample_n: 10000
+
+exp_s1:                        # the Arm S run at scale (M5)
+  plants: [MAG, RULE, BUNCH, COPY, "NULL", MIXED]
+  replicates: 25
+  eps_values: [0.005, 0.01]
+  k: 50
+  workers: 6
+  jitter:                      # per-population parameter jitter (anti-memorization)
+    MAG:   {log_mean_range: [16.5, 17.1]}
+    RULE:  {rate_choices: [773, 887, 991, 1009, 1117]}   # small primes
+    BUNCH: {threshold_choices: [500000, 1000000, 2500000]}
+
+models:                        # per-algorithm hyperparameters (cell `params` may override)
+  iforest:     {n_estimators: 200}
+  lof:         {n_neighbors: 20}
+  knn:         {n_neighbors: 10}   # pilot's n_neighbors=11 incl. self = 10 true neighbors
+  mcd:         {}
+  ocsvm:       {nu: 0.05, gamma: scale, fit_subsample: null}
+  autoencoder: {hidden: 3, max_iter: 300}
+  benford:     {}
+  round_flag:  {divisors_cents: [100, 1000, 10000, 100000, 1000000]}
+  repeat:      {}
+  dup_pair:    {}
+
+# The grid: each cell = (algorithm, feature_set, preprocessing), named
+# {algorithm}__{feature_set}__{preprocessing}. Every cell must pass the
+# "a competent auditor could defend this" test; excluded straw-man cells
+# are logged in DECISIONS.md (M2 entries). `geometry` is the declared
+# geometry class used by the alignment analysis (M3). 26 cells + ensemble.
+grid:
+  cells:
+    # Isolation Forest (7)
+    - {name: iforest__full__robust,             algorithm: iforest, features: full,             preprocessing: robust, geometry: density}
+    - {name: iforest__full__log,                algorithm: iforest, features: full,             preprocessing: log,    geometry: density}
+    - {name: iforest__full__raw,                algorithm: iforest, features: full,             preprocessing: raw,    geometry: density}
+    - {name: iforest__amount_only__robust,      algorithm: iforest, features: amount_only,      preprocessing: robust, geometry: magnitude}
+    - {name: iforest__amount_only__raw,         algorithm: iforest, features: amount_only,      preprocessing: raw,    geometry: magnitude}
+    - {name: iforest__amount_cents__robust,     algorithm: iforest, features: amount_cents,     preprocessing: robust, geometry: density}
+    - {name: iforest__full_categorical__robust, algorithm: iforest, features: full_categorical, preprocessing: robust, geometry: density}
+    # LOF (4)
+    - {name: lof__full__robust,                 algorithm: lof,     features: full,             preprocessing: robust, geometry: density}
+    - {name: lof__amount_cents__robust,         algorithm: lof,     features: amount_cents,     preprocessing: robust, geometry: density}
+    - {name: lof__amount_only__log,             algorithm: lof,     features: amount_only,      preprocessing: log,    geometry: density}
+    - {name: lof__full_categorical__robust,     algorithm: lof,     features: full_categorical, preprocessing: robust, geometry: density}
+    # kNN distance (4)
+    - {name: knn__full__robust,                 algorithm: knn,     features: full,             preprocessing: robust, geometry: density}
+    - {name: knn__amount_cents__robust,         algorithm: knn,     features: amount_cents,     preprocessing: robust, geometry: density}
+    - {name: knn__amount_only__log,             algorithm: knn,     features: amount_only,      preprocessing: log,    geometry: density}
+    - {name: knn__full_categorical__robust,     algorithm: knn,     features: full_categorical, preprocessing: robust, geometry: density}
+    # One-class SVM (3)
+    - {name: ocsvm__full__robust,               algorithm: ocsvm,   features: full,             preprocessing: robust, geometry: density}
+    - {name: ocsvm__amount_cents__robust,       algorithm: ocsvm,   features: amount_cents,     preprocessing: robust, geometry: density}
+    - {name: ocsvm__amount_only__robust,        algorithm: ocsvm,   features: amount_only,      preprocessing: robust, geometry: magnitude}
+    # Robust Mahalanobis / MCD (2)
+    - {name: mcd__amount_cents__robust,         algorithm: mcd,     features: amount_cents,     preprocessing: robust, geometry: magnitude}
+    - {name: mcd__full__robust,                 algorithm: mcd,     features: full,             preprocessing: robust, geometry: magnitude}
+    # Shallow autoencoder (2)
+    - {name: ae__full__robust,                  algorithm: autoencoder, features: full,         preprocessing: robust, geometry: density}
+    - {name: ae__full_categorical__robust,      algorithm: autoencoder, features: full_categorical, preprocessing: robust, geometry: density,
+       params: {hidden: 8, max_iter: 100}}
+    # Rule-based scorers practitioners bolt on (4)
+    - {name: benford__amount_only__raw,         algorithm: benford, features: amount_only,      preprocessing: raw,    geometry: digit}
+    - {name: round__amount_only__raw,           algorithm: round_flag, features: amount_only,   preprocessing: raw,    geometry: grid-rule}
+    - {name: repeat__amount_only__raw,          algorithm: repeat,  features: amount_only,      preprocessing: raw,    geometry: frequency}
+    - {name: dup_pair__full_categorical__raw,   algorithm: dup_pair, features: full_categorical, preprocessing: raw,   geometry: frequency}
+  ensemble:
+    name: ensemble_meanrank    # mean rank over all non-ensemble cells; geometry class "ensemble"
+  subgrids:                    # M2b ensemble grid-composition ablation
+    magnitude_heavy:           # all magnitude cells + amount-only density cells
+      - iforest__amount_only__robust
+      - iforest__amount_only__raw
+      - ocsvm__amount_only__robust
+      - mcd__amount_cents__robust
+      - mcd__full__robust
+      - knn__amount_only__log
+      - lof__amount_only__log
+    balanced:                  # 2 cells per geometry class (1 where only 1 exists)
+      - mcd__amount_cents__robust
+      - iforest__amount_only__robust
+      - knn__full__robust
+      - lof__full__robust
+      - repeat__amount_only__raw
+      - dup_pair__full_categorical__raw
+      - round__amount_only__raw
+      - benford__amount_only__raw
+
+metrics:
+  rbo_p: 0.9
+  bootstrap_n: 2000
+
+# The alignment relation A(g, p) — M1. Many-to-many, defined
+# CONSTRUCTIVELY: each geometry class declares the population coordinates
+# it is sensitive to; each plant declares the coordinates its construction
+# perturbs; A(g, p) = 1 iff the intersection is non-empty. The relation is
+# applicable to a NEW plant given only its textual construction
+# description (docs/ALIGNMENT_RELATION.md gives the scoring procedure).
+# The ensemble cell has no geometry class and is excluded from A.
+alignment:
+  coordinates:
+    tail_position:    "position in the log-amount tail (either extreme)"
+    local_sparsity:   "local density anomaly in (amount, cents) feature space: sparse neighborhoods, off-grid or rare cents values, and band concentrations"
+    value_repetition: "exact amount-value repetition count"
+    pair_repetition:  "exact (amount, vendor) pair repetition count"
+    grid_membership:  "membership of the round-number amount grid (positive direction: being ON the grid ranks high)"
+    rare_lead_digit:  "mass on Benford-rare leading digits (8, 9)"
+  class_sensitivity:
+    magnitude: [tail_position]
+    density:   [local_sparsity, tail_position]   # local methods see tail extremes as sparse
+    frequency: [value_repetition, pair_repetition]
+    grid-rule: [grid_membership]
+    digit:     [rare_lead_digit]
+  plant_perturbs:
+    MAG:    [tail_position]
+    RULE:   [local_sparsity]      # rate multiples: singleton amounts with rare/off-grid cents
+    BUNCH:  [local_sparsity]      # band concentration below the threshold; see DECISIONS for the lead-digit caveat
+    COPY:   [pair_repetition, value_repetition]
+    "NULL": []
+    MIXED:  [tail_position, local_sparsity, value_repetition, pair_repetition]
+
+autopsy:                       # ordered waterfall; first match wins (v2.1, M4)
+  order: [magnitude_top, magnitude_low, round_grid, repeated_vocab,
+          psych_ending, exact_dup_pair, near_dup_mass, local_sparse,
+          amount_sparse, rare_combo, rare_cents, rare_lead_digit,
+          dollar_round, small_amount, date_edge]
+  params:
+    magnitude_top:  {quantile: 0.99}
+    magnitude_low:  {quantile: 0.01}
+    round_grid:     {grid_cents: 10000}    # $100 grid
+    repeated_vocab: {min_count: 20}
+    psych_ending:   {endings: [49, 95, 98, 99]}
+    exact_dup_pair: {min_count: 2}         # (amount, vendor) pair repeats
+    near_dup_mass:  {min_count: 10, log_window: 0.01}
+    local_sparse:   {k: 10, quantile: 0.99}  # mean kNN dist, robust full space
+    amount_sparse:  {k: 10, quantile: 0.95}  # mean 1-D kNN dist in log-amount
+    rare_combo:     {n_bands: 10, max_count: 1}  # vendor x log-amount decile
+    rare_cents:     {max_share: 0.003}
+    rare_lead_digit: {digits: [8, 9]}
+    dollar_round:   {grid_cents: 100}      # dollar grid (sweeps late)
+    small_amount:   {quantile: 0.05}       # bottom tail, late sweep
+    date_edge:      {window_days: 7, n_days: 365}
+
+# ---------------------------------------------------------------------
+# Frozen additions (Gate S)
+# ---------------------------------------------------------------------
+
+# Near-equivalent-pairs register (P-C1): pairs with mean Jaccard@50
+# >= 0.5 in any exp_s1 condition (run 20260721T142811Z_d7e3200). The
+# register is frozen; a confirmatory pair at mean J >= 0.5 that is NOT
+# on this list falsifies P-C1's register clause.
+near_equivalent_register:
+  - ae__full_categorical__robust|iforest__amount_only__raw
+  - ae__full_categorical__robust|mcd__amount_cents__robust
+  - iforest__amount_cents__robust|iforest__amount_only__raw
+  - iforest__amount_cents__robust|iforest__amount_only__robust
+  - iforest__amount_cents__robust|mcd__amount_cents__robust
+  - iforest__amount_cents__robust|mcd__full__robust
+  - iforest__amount_only__raw|iforest__amount_only__robust
+  - iforest__amount_only__raw|iforest__full__raw
+  - iforest__amount_only__raw|mcd__amount_cents__robust
+  - iforest__amount_only__raw|mcd__full__robust
+  - iforest__amount_only__robust|knn__amount_only__log
+  - iforest__amount_only__robust|mcd__amount_cents__robust
+  - iforest__amount_only__robust|mcd__full__robust
+  - iforest__amount_only__robust|ocsvm__amount_cents__robust
+  - iforest__amount_only__robust|ocsvm__amount_only__robust
+  - iforest__full__log|iforest__full__robust
+  - iforest__full__raw|mcd__amount_cents__robust
+  - iforest__full__raw|mcd__full__robust
+  - knn__amount_cents__robust|ocsvm__amount_cents__robust
+  - knn__amount_only__log|ocsvm__amount_only__robust
+  - knn__full__robust|knn__full_categorical__robust
+  - knn__full__robust|lof__full__robust
+  - knn__full__robust|lof__full_categorical__robust
+  - knn__full_categorical__robust|lof__full_categorical__robust
+  - lof__full__robust|lof__full_categorical__robust
+  - mcd__amount_cents__robust|mcd__full__robust
+  - ocsvm__amount_cents__robust|ocsvm__amount_only__robust
+
+# Autopsy guards (P-C2), set from M3 data (run 20260721T163941Z_56dbf22).
+# Selective categories (NULL mass <= 0.03): lift floor 2.0 — all
+# measured mean lifts are >= 2.8, floor set with margin. Broad
+# categories (host mechanisms + the two waterfall absorbers) carry mass
+# ceilings only: they explain flags without enrichment by design.
+# near_dup_mass ceiling 0.15 is prompt-mandated (measured 0.121).
+autopsy_guards:
+  selective_lift_floor: 2.0
+  selective_categories: [magnitude_top, magnitude_low, local_sparse,
+                         amount_sparse, exact_dup_pair, rare_cents,
+                         rare_lead_digit, dollar_round, small_amount,
+                         date_edge]
+  mass_ceilings:
+    near_dup_mass: 0.15
+    rare_combo: 0.15
+    round_grid: 0.25
+    repeated_vocab: 0.25
+    psych_ending: 0.25
+    selective_default: 0.05    # each selective category individually
+
+# Modal-category expectation per geometry class (P-C2). round_grid is
+# included under density on the constructive argument that round-grid
+# extremes are locally sparse points in the engineered feature space
+# and the waterfall's priority order labels them round_grid first
+# (finalized after inspecting exp_s1 modal categories — measured match
+# 24/26 = 0.92; DECISIONS M5).
+geometry_expected_categories:
+  magnitude: [magnitude_top, magnitude_low]
+  density: [local_sparse, amount_sparse, near_dup_mass, magnitude_top,
+            magnitude_low, round_grid]
+  frequency: [repeated_vocab, exact_dup_pair, round_grid]
+  grid-rule: [round_grid]
+  digit: [rare_lead_digit]
+
+# The confirmatory design (A2.3 eps curve, A2.5 scale). K/(eps*N):
+# eps 0.002 -> 5.0; 0.005 -> 2.0; 0.01 -> 1.0; 0.02 -> 0.5 (at eps
+# 0.02 the budget caps recovery at 0.5 by arithmetic — stated, not
+# predicted through). Per-population distribution files are written as
+# parquet (A1.5/A2.5); summary CSVs unchanged.
+confirmatory:
+  plants: [MAG, RULE, BUNCH, COPY, "NULL", MIXED, SEALED]
+  replicates: 100
+  eps_values: [0.002, 0.005, 0.01, 0.02]
+  hosts: [default, rule_sparse, heavy_round]
+  k: 50
+  seed_root: armS-confirm-1     # fresh root; never used in exploration
+  jitter:
+    MAG:   {log_mean_range: [16.5, 17.1]}
+    RULE:  {rate_choices: [773, 887, 991, 1009, 1117]}
+    BUNCH: {threshold_choices: [500000, 1000000, 2500000]}
+  persist_distributions:        # A1.5 — first-class outputs, parquet,
+    - recovery                  # per-population rows, all conditions
+    - jaccard                   # (NULL conditions are the Gate AB
+    - rbo                       # reference distributions)
+    - consensus
+    - mix
+    - coverage
+    - residual_stats
+    - score_gap
+    - ensembles

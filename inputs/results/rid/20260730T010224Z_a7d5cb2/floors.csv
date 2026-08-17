@@ -1,0 +1,4 @@
+representation,model,floor_27_I,floor_27_acc,floor_corpus_I,floor_corpus_acc
+autopsy_mix,random_forest,-0.05,0.0353,-0.003,0.3259
+structural,random_forest,-0.076,0.037,-0.005,0.3259
+overlap_profile,random_forest,-0.062,0.0359,-0.004,0.3257

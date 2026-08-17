@@ -1,0 +1,13 @@
+section,variant,grouping,representation,classes,units,rows,accuracy
+G.1,22 common x all units,unit,autopsy_mix,22,2423,53306,0.4828
+G.1,22 common x all units,unit,structural,22,2423,53306,0.4919
+G.1,22 common x all units,component,autopsy_mix,22,2423,53306,0.479
+G.1,22 common x all units,component,structural,22,2423,53306,0.4863
+G.1,27 cells x complete units,unit,autopsy_mix,27,2371,64017,0.457
+G.1,27 cells x complete units,unit,structural,27,2371,64017,0.4371
+G.1,27 cells x complete units,component,autopsy_mix,27,2371,64017,0.4522
+G.1,27 cells x complete units,component,structural,27,2371,64017,0.4338
+G.1,22 common x complete units,unit,autopsy_mix,22,2371,52162,0.4892
+G.1,22 common x complete units,unit,structural,22,2371,52162,0.493
+G.1,22 common x complete units,component,autopsy_mix,22,2371,52162,0.4853
+G.1,22 common x complete units,component,structural,22,2371,52162,0.489

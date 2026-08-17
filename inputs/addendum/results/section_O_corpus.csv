@@ -1,0 +1,4 @@
+section,representation,model,H_corpus_empirical,error_rate,I_logloss,I_fano
+O-corpus,autopsy_mix,random_forest,2.8211,0.5747,-1.124,-0.151
+O-corpus,structural,random_forest,2.8211,0.5771,-1.061,-0.158
+O-corpus,overlap_profile,random_forest,2.8211,0.5054,-0.936,0.073

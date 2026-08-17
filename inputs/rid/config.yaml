@@ -1,0 +1,100 @@
+# R-ID frozen analysis configuration. Declared at seal time (PROTOCOL.md §4),
+# before any R-ID substrate exists and before the S4 re-score.
+# Contains no analysis code.
+#
+# Environment at declaration: Python 3.14.2, scikit-learn 1.8.0, numpy 2.4.2,
+# scipy 1.17.1, pandas 3.0.1 (config/env_m5_freeze.txt).
+
+protocol_version: "1.0"
+seed_root: r-id-v1                # disjoint from every existing root
+
+substrate:
+  source: S4 re-scored Arm A/B units (worklist record ids + per-flag autopsy
+    categories persisted)
+  units: 2423
+  specifications: 27
+  expected_worklists: 65421
+  k: 50
+
+bins:                             # reporting split; only `learned` is headlined
+  learned: 22
+  rule_based: 4
+  ensemble: 1
+
+feature_representations: [autopsy_mix, structural, overlap_profile]
+pooled: false                     # reported separately, never pooled
+
+cv:
+  seed: 20260727
+  grouped_by_unit: {scheme: grouped_kfold_by_unit, n_folds: 5}
+  loco: {scheme: leave_one_corpus_out, n_folds: 12}
+  # BOTH are run; neither is collapsed. The gap between them is a primary
+  # reported quantity (P-R-GAP).
+
+interpretation_scale:             # P-R-A, committed before any number exists
+  strong:            {c27: [0.50, 1.00], family: [0.60, 1.00]}
+  moderate:          {c27: [0.15, 0.50], family: [0.40, 0.60]}
+  does_not_survive:  {c27: [0.00, 0.15], family: [0.00, 0.40]}
+  chance_c27: 0.037037
+  majority_class_family: 0.3182
+  note: >
+    The bottom band clears chance by a wide margin. "Does not survive" is a
+    claim about practical identifiability, not statistical detectability.
+
+loco_comparison:                  # P-R-A-LOCO — comparative, not a floor
+  sid_loho_autopsy_mix: 0.659
+  sid_loho_structural: 0.672
+  committed: LOCO/grouped ratio falls BELOW each corresponding S-ID figure
+
+models:                           # unchanged from S-ID so the comparison holds
+  logistic:
+    estimator: sklearn.linear_model.LogisticRegression
+    params: {solver: lbfgs, C: 1.0, max_iter: 2000, tol: 0.0001,
+             class_weight: null, fit_intercept: true, random_state: 20260727}
+    standardize: true             # fit on TRAINING FOLDS ONLY
+  random_forest:
+    estimator: sklearn.ensemble.RandomForestClassifier
+    params: {n_estimators: 300, max_depth: 12, min_samples_leaf: 5,
+             max_features: sqrt, bootstrap: true, class_weight: null,
+             random_state: 20260727, n_jobs: 1}
+    standardize: false
+
+mutual_information:
+  estimator: plugin_from_out_of_fold_cross_entropy
+  log_base: 2
+  h_spec_bits: 4.7549             # log2(27)
+  h_corpus_bits: 3.5850           # log2(12)
+  binding_clause: normalized       # I(S;F)/H(S) >= 1.5 x I(corpus;F)/H(corpus)
+
+floors:                           # D1 corrected: instance-level, explicitly
+  floor_27:
+    construction: seeded_random_27way_partition_of_units
+    seed: 20260727001
+  floor_corpus:
+    construction: INSTANCE_LEVEL_shuffle_of_corpus_labels
+    seed: 20260727002
+    note: >
+      Specified at instance level explicitly. A unit-level relabelling leaves
+      mutual information invariant and would make the floor equal the signal —
+      see sid/PROTOCOL_DEFECTS.md D1.
+
+confusion_clause:                 # D2 corrected: precision, not Jaccard
+  statistic: precision_of_confused_pairs_against_corpus_register
+  threshold: 0.50
+  min_confused_pairs: 3
+  below_minimum: not_evaluable    # never reported as a failure
+  scope: 26 non-ensemble cells, per corpus
+
+bootstrap:
+  n_resamples: 2000
+  unit: corpus                    # resample corpora for the LOCO/gap CIs
+  refit_classifiers: false
+  ci: 0.95
+  seed: 20260727003
+
+execution:
+  results_root: results/rid
+  respect_runlock: true
+  thread_pins: {OMP_NUM_THREADS: 1, VECLIB_MAXIMUM_THREADS: 1}
+  determinism_probe: true
+  sealing_commits_execution: false   # PROTOCOL.md status block

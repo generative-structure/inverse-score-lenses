@@ -1,0 +1,8 @@
+section,study,task,arm,accuracy,classes
+N,R-ID,spec-22-common,N.1 common-cell,0.7233,22
+N,R-ID,family,N.1 common-cell,0.9023,6
+N,R-ID,spec-27,N.2 mask-present,0.6899,27
+N,R-ID,family,N.2 mask-present,0.8871,6
+N,R-ID,spec-27,N.2 mask-dropped,0.6895,27
+N,R-ID,family,N.2 mask-dropped,0.8922,6
+N,S-ID,spec-22-common,N.1 common-cell,0.9391,22

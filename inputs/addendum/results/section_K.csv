@@ -1,0 +1,7 @@
+section,k,representation,accuracy,I_bits
+K,10,autopsy_mix,0.2967,1.502
+K,10,overlap_profile,0.5229,2.505
+K,25,autopsy_mix,0.382,1.857
+K,25,overlap_profile,0.6187,2.854
+K,50,autopsy_mix,0.4495,2.11
+K,50,overlap_profile,0.6902,3.071

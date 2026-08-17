@@ -1,0 +1,4 @@
+representation,model,I_S_bits,I_corpus_bits,I_corpus_CI,norm_S,norm_corpus,norm_ratio
+autopsy_mix,random_forest,2.137,0.556,"[-0.407, 1.021]",0.4494,0.1552,2.9
+structural,random_forest,2.2,0.615,"[-0.279, 1.077]",0.4626,0.1716,2.7
+overlap_profile,random_forest,3.093,0.744,"[-0.170, 1.214]",0.6504,0.2076,3.13

@@ -1,0 +1,821 @@
+# FROZEN at gateAB-closed (2026-07-22/23). Amendments: implementation
+# errors only, never results. Signatures recorded in DECISIONS.
+meta:
+  frozen: true
+  gate: AB
+  date: '2026-07-22'
+  signatures: DECISIONS 2026-07-22 (seven decisions)
+  note: 'post-tag changes: implementation errors only, never results'
+sign_convention:
+  rule: DROP amount_cents <= 0 at load
+  excluded_counts: data/raw/<corpus>/substrate/build_report.json
+  appendix_alternative: abs (implemented, measured)
+pii:
+  rule: personal-name columns never read into substrates; vendor identity only
+    as salted irreversible hash; salt local, never committed
+pi:
+  min_unit_n: 1000
+  levels:
+    chicago: &id001
+    - fy
+    - fy_office
+    dc_pass: &id002
+    - fy
+    - fy_office
+    dc_pcard: &id003
+    - fy
+    - fy_office
+    louisville: &id004
+    - fy
+    - fy_office
+    ct: &id005
+    - fy
+    - fy_office
+    md: &id008
+    - fy
+    sf: &id011
+    - fy
+    - fy_office
+    nyc: &id012
+    - fy
+    - fy_office
+    epa: &id013
+    - fy
+    - fy_office
+    cms: &id014
+    - fy
+    - fy_office
+    fec: &id015
+    - fy
+    - fy_office
+    tlc: &id016
+    - fy
+    - fy_office
+  note: fy_office = fiscal year x office; excluded-office shares are a main-text
+    finding
+nyc_substrate_sha256: 6af72b7370996cc0fa18099c688b9968fb40c9ba69452bab2e12d9500aecde31
+sf_unit_rule: PO-year rows as records (portal-published unit); PO-collapse documented
+  as sensitivity
+dob: 'excluded: not trivially cheap (no substrate built); signed condition not
+  met'
+scoring_policies:
+  exact_max_rows: 250000
+  neighbor_flop_max: 1.0e+16
+  superlinear_fit_subsample_above: 50000
+  fit_subsample: 50000
+  onehot_max_vendors: 20000
+  fullcat_above_onehot_max: cells structurally infeasible; reported, excluded
+    from pair metrics
+equivalence:
+  n_window:
+  - 1000
+  - 30000
+  note: equivalence verdicts on units inside the calibrated N window only; C1/C2
+    on ALL units
+  quantities:
+  - median_j
+  - median_rbo
+  - mean_coverage
+  - n_ge8_per_n
+  - residual_rate
+  pass_rule: '>=4 of 5 inside bands with median_j AND median_rbo mandatory; low-side
+    J/RBO failures are not passes'
+  residual_materiality: 0.15
+  corpus_pass_share: 0.7
+occupancy_prediction:
+  applies_dup_mass_gte: 0.5
+  family:
+  - exact_dup_pair
+  - near_dup_mass
+  - repeated_vocab
+  - round_grid
+  floor_median_over_units: 0.6
+  derivation: '21 dup>=0.5 reference hosts x 10 NULL pops: family share q05=0.70
+    median=0.90 min=0.52; two-category form (median 0.48) pre-empted by waterfall
+    priority - DECISIONS'
+slates:
+  chicago:
+    pi_levels: *id001
+    assigned_host: lhs30
+    assigned_host_params:
+      host_overrides:
+        weights:
+          generic: 0.4254
+          round: 0.2554
+          vocab: 0.1915
+          psych: 0.1277
+        generic.log_sd: 0.721
+        vocab.n_values: 21
+        round.bases_cents:
+        - 10000
+        - 100000
+        - 1000000
+      vendor_coupling: 0.641
+      n: 7000
+      dup_rate: 0.361
+      n_vendors: 358
+      adjustment_rate: 0.003
+      sign_convention: abs
+    match_distance: 4.017
+    match_disclosure: ok
+    coordinates:
+      dup_pair: 0.2803
+      vendor_ratio: 0.1667
+      cents0: 0.4081
+      top25: 0.1463
+      tail: 3.0714
+    bands:
+      n: 7021
+      median_j:
+      - 0.0024242424242424242
+      - 0.03908934707903778
+      median_rbo:
+      - 0.0003758228987745046
+      - 0.010419987932033052
+      mean_coverage:
+      - 0.9881185185185185
+      - 0.9996444444444444
+      n_ge8_per_n:
+      - 0.0010653753026634383
+      - 0.0029910269192422734
+      residual_rate:
+      - 0.0003692307692307692
+      - 0.012338461538461533
+    register:
+    - iforest__amount_only__raw|iforest__amount_only__robust
+    - iforest__amount_only__raw|mcd__amount_cents__robust
+    - iforest__amount_only__raw|ocsvm__amount_cents__robust
+    - iforest__amount_only__raw|ocsvm__amount_only__robust
+    - iforest__amount_only__robust|mcd__amount_cents__robust
+    - iforest__amount_only__robust|ocsvm__amount_only__robust
+    - mcd__amount_cents__robust|ocsvm__amount_cents__robust
+    - mcd__amount_cents__robust|ocsvm__amount_only__robust
+    - mcd__amount_cents__robust|ocsvm__full__robust
+    - ocsvm__amount_cents__robust|ocsvm__amount_only__robust
+    - ocsvm__amount_cents__robust|ocsvm__full__robust
+    - ocsvm__amount_only__robust|ocsvm__full__robust
+    register_slice: fy=2025, seeded uniform 100000 of 115610
+  dc_pass:
+    pi_levels: *id002
+    assigned_host: lhs13
+    assigned_host_params: &id009
+      host_overrides:
+        weights:
+          generic: 0.5105
+          round: 0.2176
+          vocab: 0.1632
+          psych: 0.1087
+        generic.log_sd: 1.392
+        vocab.n_values: 72
+        round.bases_cents:
+        - 100
+        - 500
+        - 1000
+        - 5000
+        - 10000
+        - 25000
+        - 50000
+        - 100000
+        - 250000
+        - 500000
+      vendor_coupling: 0.556
+      n: 8200
+      dup_rate: 0.139
+      n_vendors: 113
+      adjustment_rate: 0.008
+      sign_convention: drop
+    match_distance: 2.081
+    match_disclosure: ok
+    coordinates:
+      dup_pair: 0.2779
+      vendor_ratio: 0.0787
+      cents0: 0.2701
+      top25: 0.0446
+      tail: 2.7037
+    bands: &id010
+      n: 8200
+      median_j:
+      - 0.010101010101010102
+      - 0.028403113822848707
+      median_rbo:
+      - 0.0005121100646558369
+      - 0.007519082871252455
+      mean_coverage:
+      - 0.9705185185185186
+      - 0.9907555555555555
+      n_ge8_per_n:
+      - 0.0005170731707317074
+      - 0.0027804878048780473
+      residual_rate:
+      - 0.009600000000000001
+      - 0.030615384615384607
+    register:
+    - dup_pair__full_categorical__raw|repeat__amount_only__raw
+    - iforest__amount_only__robust|knn__amount_only__log
+    - iforest__amount_only__robust|mcd__amount_cents__robust
+    - iforest__amount_only__robust|ocsvm__amount_cents__robust
+    - iforest__amount_only__robust|ocsvm__amount_only__robust
+    - iforest__amount_only__robust|ocsvm__full__robust
+    - iforest__full__log|iforest__full__raw
+    - iforest__full__log|iforest__full__robust
+    - iforest__full__raw|iforest__full__robust
+    - knn__amount_cents__robust|knn__amount_only__log
+    - knn__amount_cents__robust|mcd__amount_cents__robust
+    - knn__amount_cents__robust|ocsvm__amount_cents__robust
+    - knn__amount_only__log|mcd__amount_cents__robust
+    - knn__amount_only__log|ocsvm__amount_cents__robust
+    - knn__amount_only__log|ocsvm__amount_only__robust
+    - knn__amount_only__log|ocsvm__full__robust
+    - mcd__amount_cents__robust|ocsvm__amount_cents__robust
+    - mcd__amount_cents__robust|ocsvm__amount_only__robust
+    - ocsvm__amount_cents__robust|ocsvm__amount_only__robust
+    - ocsvm__amount_cents__robust|ocsvm__full__robust
+    - ocsvm__amount_only__robust|ocsvm__full__robust
+    register_slice: fy=2025, full unit
+  dc_pcard:
+    pi_levels: *id003
+    assigned_host: lhs29
+    assigned_host_params:
+      host_overrides:
+        weights:
+          generic: 0.5436
+          round: 0.2028
+          vocab: 0.1521
+          psych: 0.1015
+        generic.log_sd: 1.076
+        vocab.n_values: 48
+        round.bases_cents:
+        - 100
+        - 500
+        - 1000
+        - 5000
+        - 10000
+        - 25000
+        - 50000
+        - 100000
+        - 250000
+        - 500000
+      vendor_coupling: 0.401
+      n: 6500
+      dup_rate: 0.275
+      n_vendors: 1366
+      adjustment_rate: 0.054
+      sign_convention: drop
+    match_distance: 5.541
+    match_disclosure: ok
+    coordinates:
+      dup_pair: 0.3456
+      vendor_ratio: 0.1355
+      cents0: 0.3629
+      top25: 0.0935
+      tail: 1.225
+    bands:
+      n: 6500
+      median_j:
+      - 0.02040816326530612
+      - 0.061142217245240736
+      median_rbo:
+      - 0.0018795667953214394
+      - 0.028369966981477236
+      mean_coverage:
+      - 0.9861037037037037
+      - 0.9968592592592592
+      n_ge8_per_n:
+      - 0.001883076923076923
+      - 0.004886153846153846
+      residual_rate:
+      - 0.0032615384615384616
+      - 0.01443076923076923
+    register:
+    - ae__full__robust|ocsvm__full__robust
+    - iforest__amount_only__robust|knn__amount_cents__robust
+    - iforest__amount_only__robust|knn__amount_only__log
+    - iforest__amount_only__robust|mcd__amount_cents__robust
+    - iforest__amount_only__robust|ocsvm__amount_cents__robust
+    - iforest__amount_only__robust|ocsvm__amount_only__robust
+    - knn__amount_cents__robust|knn__amount_only__log
+    - knn__amount_cents__robust|ocsvm__amount_cents__robust
+    - knn__amount_cents__robust|ocsvm__amount_only__robust
+    - knn__amount_only__log|ocsvm__amount_cents__robust
+    - knn__amount_only__log|ocsvm__amount_only__robust
+    - mcd__amount_cents__robust|ocsvm__amount_only__robust
+    - ocsvm__amount_cents__robust|ocsvm__amount_only__robust
+    register_slice: fy=2025, full unit
+  louisville:
+    pi_levels: *id004
+    assigned_host: lhs16
+    assigned_host_params: &id006
+      host_overrides:
+        weights:
+          generic: 0.3568
+          round: 0.2859
+          vocab: 0.2144
+          psych: 0.1429
+        generic.log_sd: 1.074
+        vocab.n_values: 81
+        round.bases_cents:
+        - 100
+        - 500
+        - 1000
+        - 5000
+        - 10000
+        - 25000
+        - 50000
+        - 100000
+        - 250000
+        - 500000
+      vendor_coupling: 0.665
+      n: 8100
+      dup_rate: 0.203
+      n_vendors: 78
+      adjustment_rate: 0.06
+      sign_convention: abs
+    match_distance: 2.346
+    match_disclosure: ok
+    coordinates:
+      dup_pair: 0.5707
+      vendor_ratio: 0.0782
+      cents0: 0.4091
+      top25: 0.1777
+      tail: 2.4425
+    bands: &id007
+      n: 8586
+      median_j:
+      - 0.0024242424242424242
+      - 0.02040816326530612
+      median_rbo:
+      - 0.00025337554503479553
+      - 0.003283817620706255
+      mean_coverage:
+      - 0.9844148148148149
+      - 0.9976
+      n_ge8_per_n:
+      - 0.00023293733985557886
+      - 0.0028045655718611675
+      residual_rate:
+      - 0.0024923076923076925
+      - 0.016184615384615377
+    register:
+    - dup_pair__full_categorical__raw|repeat__amount_only__raw
+    - iforest__amount_only__raw|iforest__amount_only__robust
+    - knn__amount_cents__robust|ocsvm__amount_cents__robust
+    - knn__amount_only__log|ocsvm__amount_cents__robust
+    - knn__amount_only__log|ocsvm__amount_only__robust
+    - knn__amount_only__log|ocsvm__full__robust
+    - ocsvm__amount_cents__robust|ocsvm__amount_only__robust
+    - ocsvm__amount_cents__robust|ocsvm__full__robust
+    - ocsvm__amount_only__robust|ocsvm__full__robust
+    register_slice: fy=2025, seeded uniform 100000 of 160750
+  ct:
+    pi_levels: *id005
+    assigned_host: lhs16
+    assigned_host_params: *id006
+    match_distance: 2.916
+    match_disclosure: ok
+    coordinates:
+      dup_pair: 0.3775
+      vendor_ratio: 0.0699
+      cents0: 0.32
+      top25: 0.0667
+      tail: 2.9487
+    bands: *id007
+    register:
+    - dup_pair__full_categorical__raw|repeat__amount_only__raw
+    - iforest__amount_only__raw|mcd__amount_cents__robust
+    - iforest__amount_only__robust|ocsvm__amount_cents__robust
+    - iforest__amount_only__robust|ocsvm__amount_only__robust
+    - iforest__amount_only__robust|ocsvm__full__robust
+    - knn__amount_only__log|ocsvm__amount_cents__robust
+    - knn__amount_only__log|ocsvm__amount_only__robust
+    - mcd__amount_cents__robust|ocsvm__amount_cents__robust
+    - ocsvm__amount_cents__robust|ocsvm__amount_only__robust
+    - ocsvm__amount_cents__robust|ocsvm__full__robust
+    - ocsvm__amount_only__robust|ocsvm__full__robust
+    register_slice: fy=2025, seeded uniform 100000 of 880588
+  md:
+    pi_levels: *id008
+    assigned_host: lhs13
+    assigned_host_params: *id009
+    match_distance: 2.708
+    match_disclosure: ok
+    coordinates:
+      dup_pair: 0.0375
+      vendor_ratio: 0.1533
+      cents0: 0.3304
+      top25: 0.0487
+      tail: 2.4672
+    bands: *id010
+    register:
+    - ae__full__robust|repeat__amount_only__raw
+    - iforest__amount_only__raw|iforest__amount_only__robust
+    - iforest__amount_only__raw|iforest__full__raw
+    - iforest__amount_only__raw|knn__amount_only__log
+    - iforest__amount_only__raw|ocsvm__amount_only__robust
+    - iforest__amount_only__robust|iforest__full__raw
+    - iforest__amount_only__robust|knn__amount_only__log
+    - iforest__amount_only__robust|ocsvm__amount_cents__robust
+    - iforest__amount_only__robust|ocsvm__amount_only__robust
+    - iforest__full__log|iforest__full__robust
+    - iforest__full__raw|ocsvm__amount_cents__robust
+    - knn__amount_cents__robust|ocsvm__amount_cents__robust
+    - knn__amount_only__log|ocsvm__amount_cents__robust
+    - knn__amount_only__log|ocsvm__amount_only__robust
+    - knn__full__robust|ocsvm__full__robust
+    - ocsvm__amount_cents__robust|ocsvm__amount_only__robust
+    register_slice: fy=2025, full unit
+  sf:
+    pi_levels: *id011
+    assigned_host: lhs38
+    assigned_host_params:
+      host_overrides:
+        weights:
+          generic: 0.6171
+          round: 0.1702
+          vocab: 0.1276
+          psych: 0.0851
+        generic.log_sd: 1.176
+        vocab.n_values: 27
+        round.bases_cents:
+        - 10000
+        - 100000
+        - 1000000
+      vendor_coupling: 0.08
+      n: 8400
+      dup_rate: 0.047
+      n_vendors: 86
+      adjustment_rate: 0.078
+      sign_convention: abs
+    match_distance: 3.756
+    match_disclosure: ok
+    coordinates:
+      dup_pair: 0.3398
+      vendor_ratio: 0.0551
+      cents0: 0.2705
+      top25: 0.0473
+      tail: 3.3499
+    bands:
+      n: 9055
+      median_j:
+      - 0.010101010101010102
+      - 0.030927835051546393
+      median_rbo:
+      - 0.000659170323252335
+      - 0.003689308818891229
+      mean_coverage:
+      - 0.9793481481481482
+      - 0.9983407407407408
+      n_ge8_per_n:
+      - 0.0007156267255659857
+      - 0.0021866372170071774
+      residual_rate:
+      - 0.001723076923076923
+      - 0.021446153846153827
+    register:
+    - dup_pair__full_categorical__raw|repeat__amount_only__raw
+    - iforest__amount_only__raw|iforest__amount_only__robust
+    - iforest__amount_only__raw|knn__amount_cents__robust
+    - iforest__amount_only__raw|knn__amount_only__log
+    - iforest__amount_only__raw|mcd__amount_cents__robust
+    - iforest__amount_only__raw|ocsvm__amount_cents__robust
+    - iforest__amount_only__raw|ocsvm__amount_only__robust
+    - iforest__amount_only__raw|ocsvm__full__robust
+    - iforest__amount_only__robust|knn__amount_cents__robust
+    - iforest__amount_only__robust|mcd__amount_cents__robust
+    - iforest__amount_only__robust|ocsvm__amount_cents__robust
+    - iforest__amount_only__robust|ocsvm__amount_only__robust
+    - knn__amount_cents__robust|knn__amount_only__log
+    - knn__amount_cents__robust|mcd__amount_cents__robust
+    - knn__amount_cents__robust|ocsvm__amount_cents__robust
+    - knn__amount_cents__robust|ocsvm__amount_only__robust
+    - knn__amount_cents__robust|ocsvm__full__robust
+    - knn__amount_only__log|ocsvm__amount_cents__robust
+    - knn__amount_only__log|ocsvm__amount_only__robust
+    - knn__amount_only__log|ocsvm__full__robust
+    - mcd__amount_cents__robust|ocsvm__amount_cents__robust
+    - mcd__amount_cents__robust|ocsvm__amount_only__robust
+    - mcd__amount_cents__robust|ocsvm__full__robust
+    - ocsvm__amount_cents__robust|ocsvm__amount_only__robust
+    - ocsvm__amount_cents__robust|ocsvm__full__robust
+    - ocsvm__amount_only__robust|ocsvm__full__robust
+    register_slice: fy=2025, seeded uniform 100000 of 265657
+  nyc:
+    pi_levels: *id012
+    assigned_host: lhs16
+    assigned_host_params: *id006
+    match_distance: 2.686
+    match_disclosure: ok
+    coordinates:
+      dup_pair: 0.3274
+      vendor_ratio: 0.0644
+      cents0: 0.3174
+      top25: 0.0563
+      tail: 2.8468
+    bands: *id007
+    register:
+    - ae__full_categorical__robust|ocsvm__amount_cents__robust
+    - ae__full_categorical__robust|ocsvm__amount_only__robust
+    - ae__full_categorical__robust|ocsvm__full__robust
+    - dup_pair__full_categorical__raw|repeat__amount_only__raw
+    - iforest__amount_only__robust|mcd__amount_cents__robust
+    - iforest__amount_only__robust|ocsvm__amount_cents__robust
+    - iforest__amount_only__robust|ocsvm__amount_only__robust
+    - iforest__amount_only__robust|ocsvm__full__robust
+    - mcd__amount_cents__robust|ocsvm__amount_cents__robust
+    - mcd__amount_cents__robust|ocsvm__amount_only__robust
+    - mcd__amount_cents__robust|ocsvm__full__robust
+    - ocsvm__amount_cents__robust|ocsvm__amount_only__robust
+    - ocsvm__amount_cents__robust|ocsvm__full__robust
+    - ocsvm__amount_only__robust|ocsvm__full__robust
+    register_slice: fy=2025, seeded uniform 100000 of 3123744
+  epa:
+    pi_levels: *id013
+    assigned_host: lhs11
+    assigned_host_params: &id017
+      host_overrides:
+        weights:
+          generic: 0.7745
+          round: 0.1002
+          vocab: 0.0752
+          psych: 0.0501
+        generic.log_sd: 0.765
+        vocab.n_values: 19
+        round.bases_cents:
+        - 100
+        - 500
+        - 1000
+        - 5000
+        - 10000
+        - 25000
+        - 50000
+        - 100000
+        - 250000
+        - 500000
+      vendor_coupling: 0.124
+      n: 3500
+      dup_rate: 0.385
+      n_vendors: 1155
+      adjustment_rate: 0.063
+      sign_convention: drop
+    match_distance: 7.824
+    match_disclosure: ok
+    coordinates:
+      dup_pair: 0.4201
+      vendor_ratio: 0.0032
+      cents0: 0.0675
+      top25: 0.0553
+      tail: 0.2456
+    bands: &id018
+      n: 3500
+      median_j:
+      - 0.041666666666666664
+      - 0.10818070818070816
+      median_rbo:
+      - 0.017711153192838915
+      - 0.07818831488257987
+      mean_coverage:
+      - 0.9860740740740741
+      - 0.9983407407407408
+      n_ge8_per_n:
+      - 0.009565714285714285
+      - 0.015154285714285712
+      residual_rate:
+      - 0.001723076923076923
+      - 0.014461538461538455
+    register:
+    - iforest__amount_only__robust|knn__amount_cents__robust
+    - iforest__amount_only__robust|knn__amount_only__log
+    - iforest__amount_only__robust|mcd__amount_cents__robust
+    - iforest__amount_only__robust|mcd__full__robust
+    - iforest__amount_only__robust|ocsvm__amount_cents__robust
+    - iforest__amount_only__robust|ocsvm__amount_only__robust
+    - iforest__full__log|iforest__full__robust
+    - knn__amount_cents__robust|knn__amount_only__log
+    - knn__amount_cents__robust|mcd__amount_cents__robust
+    - knn__amount_cents__robust|mcd__full__robust
+    - knn__amount_cents__robust|ocsvm__amount_cents__robust
+    - knn__amount_cents__robust|ocsvm__amount_only__robust
+    - knn__amount_only__log|mcd__amount_cents__robust
+    - knn__amount_only__log|mcd__full__robust
+    - knn__amount_only__log|ocsvm__amount_cents__robust
+    - knn__amount_only__log|ocsvm__amount_only__robust
+    - knn__full__robust|knn__full_categorical__robust
+    - mcd__amount_cents__robust|mcd__full__robust
+    - mcd__amount_cents__robust|ocsvm__amount_cents__robust
+    - mcd__amount_cents__robust|ocsvm__amount_only__robust
+    - mcd__full__robust|ocsvm__amount_cents__robust
+    - mcd__full__robust|ocsvm__amount_only__robust
+    - ocsvm__amount_cents__robust|ocsvm__amount_only__robust
+    register_slice: fy=2025, seeded uniform 100000 of 380932
+  cms:
+    pi_levels: *id014
+    assigned_host: lhs01
+    assigned_host_params:
+      host_overrides:
+        weights:
+          generic: 0.8419
+          round: 0.0703
+          vocab: 0.0527
+          psych: 0.0351
+        generic.log_sd: 1.006
+        vocab.n_values: 56
+        round.bases_cents:
+        - 100
+        - 500
+        - 1000
+        - 5000
+        - 10000
+        - 25000
+        - 50000
+        - 100000
+        - 250000
+        - 500000
+      vendor_coupling: 0.269
+      n: 4100
+      dup_rate: 0.491
+      n_vendors: 562
+      adjustment_rate: 0.053
+      sign_convention: drop
+    match_distance: 1.259
+    match_disclosure: ok
+    coordinates:
+      dup_pair: 0.644
+      vendor_ratio: 0.0027
+      cents0: 0.0635
+      top25: 0.0262
+      tail: 2.1811
+    bands:
+      n: 4100
+      median_j:
+      - 0.08695652173913043
+      - 0.1462904911180773
+      median_rbo:
+      - 0.024533717525807762
+      - 0.14496900643380103
+      mean_coverage:
+      - 0.9823999999999999
+      - 0.9965037037037037
+      n_ge8_per_n:
+      - 0.00975609756097561
+      - 0.01408780487804878
+      residual_rate:
+      - 0.003630769230769231
+      - 0.018276923076923076
+    register:
+    - ae__full__robust|iforest__amount_only__robust
+    - iforest__amount_cents__robust|mcd__amount_cents__robust
+    - iforest__amount_only__raw|knn__amount_only__log
+    - iforest__amount_only__raw|mcd__amount_cents__robust
+    - iforest__amount_only__raw|mcd__full__robust
+    - iforest__amount_only__raw|ocsvm__amount_cents__robust
+    - iforest__amount_only__raw|ocsvm__amount_only__robust
+    - iforest__amount_only__raw|ocsvm__full__robust
+    - iforest__full__log|iforest__full__robust
+    - knn__amount_only__log|mcd__amount_cents__robust
+    - knn__amount_only__log|mcd__full__robust
+    - knn__amount_only__log|ocsvm__amount_cents__robust
+    - knn__amount_only__log|ocsvm__amount_only__robust
+    - knn__amount_only__log|ocsvm__full__robust
+    - knn__full__robust|knn__full_categorical__robust
+    - mcd__amount_cents__robust|mcd__full__robust
+    - mcd__amount_cents__robust|ocsvm__amount_cents__robust
+    - mcd__amount_cents__robust|ocsvm__amount_only__robust
+    - mcd__amount_cents__robust|ocsvm__full__robust
+    - mcd__full__robust|ocsvm__amount_cents__robust
+    - mcd__full__robust|ocsvm__amount_only__robust
+    - mcd__full__robust|ocsvm__full__robust
+    - ocsvm__amount_cents__robust|ocsvm__amount_only__robust
+    - ocsvm__amount_cents__robust|ocsvm__full__robust
+    - ocsvm__amount_only__robust|ocsvm__full__robust
+    register_slice: fy=2024, seeded uniform 100000 of 15498687
+  fec:
+    pi_levels: *id015
+    assigned_host: lhs09
+    assigned_host_params:
+      host_overrides:
+        weights:
+          generic: 0.386
+          round: 0.2729
+          vocab: 0.2047
+          psych: 0.1364
+        generic.log_sd: 1.098
+        vocab.n_values: 9
+        round.bases_cents:
+        - 10000
+        - 100000
+        - 1000000
+      vendor_coupling: 0.133
+      n: 3000
+      dup_rate: 0.511
+      n_vendors: 157
+      adjustment_rate: 0.006
+      sign_convention: drop
+    match_distance: 15.822
+    match_disclosure: DISTANT MATCH - verdicts carry disclosure
+    coordinates:
+      dup_pair: 0.6054
+      vendor_ratio: 0.2611
+      cents0: 1.0
+      top25: 0.7804
+      tail: 2.6198
+    bands:
+      n: 3000
+      median_j:
+      - 0.012574726860441147
+      - 0.049999999999999975
+      median_rbo:
+      - 0.0014428126141811971
+      - 0.020510222713270188
+      mean_coverage:
+      - 0.9768
+      - 0.9946370370370371
+      n_ge8_per_n:
+      - 0.0051600000000000005
+      - 0.010666666666666666
+      residual_rate:
+      - 0.005569230769230769
+      - 0.0235076923076923
+    register:
+    - ae__full__robust|mcd__full__robust
+    - iforest__amount_cents__robust|iforest__amount_only__raw
+    - iforest__amount_cents__robust|iforest__amount_only__robust
+    - iforest__amount_cents__robust|knn__amount_cents__robust
+    - iforest__amount_cents__robust|knn__amount_only__log
+    - iforest__amount_cents__robust|mcd__amount_cents__robust
+    - iforest__amount_cents__robust|ocsvm__amount_cents__robust
+    - iforest__amount_cents__robust|ocsvm__amount_only__robust
+    - iforest__amount_cents__robust|ocsvm__full__robust
+    - iforest__amount_only__raw|iforest__amount_only__robust
+    - iforest__amount_only__raw|knn__amount_cents__robust
+    - iforest__amount_only__raw|knn__amount_only__log
+    - iforest__amount_only__raw|mcd__amount_cents__robust
+    - iforest__amount_only__raw|ocsvm__amount_cents__robust
+    - iforest__amount_only__raw|ocsvm__amount_only__robust
+    - iforest__amount_only__raw|ocsvm__full__robust
+    - iforest__amount_only__robust|knn__amount_cents__robust
+    - iforest__amount_only__robust|knn__amount_only__log
+    - iforest__amount_only__robust|mcd__amount_cents__robust
+    - iforest__amount_only__robust|ocsvm__amount_cents__robust
+    - iforest__amount_only__robust|ocsvm__amount_only__robust
+    - iforest__amount_only__robust|ocsvm__full__robust
+    - iforest__full__log|iforest__full__robust
+    - iforest__full__raw|ocsvm__full__robust
+    - knn__amount_cents__robust|knn__amount_only__log
+    - knn__amount_cents__robust|mcd__amount_cents__robust
+    - knn__amount_cents__robust|ocsvm__amount_cents__robust
+    - knn__amount_cents__robust|ocsvm__amount_only__robust
+    - knn__amount_only__log|mcd__amount_cents__robust
+    - knn__amount_only__log|ocsvm__amount_cents__robust
+    - knn__amount_only__log|ocsvm__amount_only__robust
+    - lof__amount_cents__robust|lof__amount_only__log
+    - mcd__amount_cents__robust|ocsvm__amount_cents__robust
+    - mcd__amount_cents__robust|ocsvm__amount_only__robust
+    - mcd__amount_cents__robust|ocsvm__full__robust
+    - ocsvm__amount_cents__robust|ocsvm__amount_only__robust
+    - ocsvm__amount_cents__robust|ocsvm__full__robust
+    - ocsvm__amount_only__robust|ocsvm__full__robust
+    register_slice: fy=2025, seeded uniform 100000 of 3735126
+  tlc:
+    pi_levels: *id016
+    assigned_host: lhs11
+    assigned_host_params: *id017
+    match_distance: 5.999
+    match_disclosure: ok
+    coordinates:
+      dup_pair: 0.7892
+      vendor_ratio: 0.0005
+      cents0: 0.0428
+      top25: 0.0987
+      tail: 0.6847
+    bands: *id018
+    register:
+    - ae__full__robust|iforest__amount_only__robust
+    - ae__full__robust|knn__amount_only__log
+    - ae__full__robust|mcd__amount_cents__robust
+    - ae__full__robust|ocsvm__amount_cents__robust
+    - ae__full__robust|ocsvm__amount_only__robust
+    - iforest__amount_only__robust|knn__amount_only__log
+    - iforest__amount_only__robust|mcd__amount_cents__robust
+    - iforest__amount_only__robust|mcd__full__robust
+    - iforest__amount_only__robust|ocsvm__amount_cents__robust
+    - iforest__amount_only__robust|ocsvm__amount_only__robust
+    - iforest__amount_only__robust|ocsvm__full__robust
+    - iforest__full__log|iforest__full__robust
+    - knn__amount_only__log|mcd__amount_cents__robust
+    - knn__amount_only__log|ocsvm__amount_cents__robust
+    - knn__amount_only__log|ocsvm__amount_only__robust
+    - knn__amount_only__log|ocsvm__full__robust
+    - knn__full__robust|knn__full_categorical__robust
+    - mcd__amount_cents__robust|mcd__full__robust
+    - mcd__amount_cents__robust|ocsvm__amount_cents__robust
+    - mcd__amount_cents__robust|ocsvm__amount_only__robust
+    - mcd__amount_cents__robust|ocsvm__full__robust
+    - mcd__full__robust|ocsvm__amount_cents__robust
+    - mcd__full__robust|ocsvm__amount_only__robust
+    - mcd__full__robust|ocsvm__full__robust
+    - ocsvm__amount_cents__robust|ocsvm__amount_only__robust
+    - ocsvm__amount_cents__robust|ocsvm__full__robust
+    - ocsvm__amount_only__robust|ocsvm__full__robust
+    register_slice: fy=2025, seeded uniform 100000 of 4478757
+twins:
+  per_corpus: 5
+  at: assigned host coordinates

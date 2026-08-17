@@ -1,0 +1,5 @@
+section,task,representation,accuracy,classes
+N-match,spec-22-common,autopsy_mix,0.479,22
+N-match,spec-22-common,structural,0.4863,22
+N-match,family,autopsy_mix,0.6095,6
+N-match,family,structural,0.6384,6

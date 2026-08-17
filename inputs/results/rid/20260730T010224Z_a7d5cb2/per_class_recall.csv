@@ -1,0 +1,55 @@
+representation,class,instances,recall
+autopsy_mix,ae__full__robust,2423,0.135
+autopsy_mix,ae__full_categorical__robust **,2371,0.31
+autopsy_mix,benford__amount_only__raw,2423,0.811
+autopsy_mix,dup_pair__full_categorical__raw **,2371,0.3256
+autopsy_mix,ensemble_meanrank,2423,0.572
+autopsy_mix,iforest__amount_cents__robust,2423,0.2047
+autopsy_mix,iforest__amount_only__raw,2423,0.844
+autopsy_mix,iforest__amount_only__robust,2423,0.1395
+autopsy_mix,iforest__full__log,2423,0.1907
+autopsy_mix,iforest__full__raw,2423,0.6418
+autopsy_mix,iforest__full__robust,2423,0.2303
+autopsy_mix,iforest__full_categorical__robust **,2371,0.3492
+autopsy_mix,knn__amount_cents__robust,2423,0.3665
+autopsy_mix,knn__amount_only__log,2423,0.4428
+autopsy_mix,knn__full__robust,2423,0.6162
+autopsy_mix,knn__full_categorical__robust **,2371,0.7689
+autopsy_mix,lof__amount_cents__robust,2423,0.5415
+autopsy_mix,lof__amount_only__log,2423,0.5997
+autopsy_mix,lof__full__robust,2423,0.3326
+autopsy_mix,lof__full_categorical__robust **,2371,0.4757
+autopsy_mix,mcd__amount_cents__robust,2423,0.2319
+autopsy_mix,mcd__full__robust,2423,0.0103
+autopsy_mix,ocsvm__amount_cents__robust,2423,0.3112
+autopsy_mix,ocsvm__amount_only__robust,2423,0.7214
+autopsy_mix,ocsvm__full__robust,2423,0.5324
+autopsy_mix,repeat__amount_only__raw,2423,0.6125
+autopsy_mix,round__amount_only__raw,2423,0.8861
+structural,ae__full__robust,2423,0.1234
+structural,ae__full_categorical__robust **,2371,0.2476
+structural,benford__amount_only__raw,2423,0.7161
+structural,dup_pair__full_categorical__raw **,2371,0.6605
+structural,ensemble_meanrank,2423,0.5902
+structural,iforest__amount_cents__robust,2423,0.2967
+structural,iforest__amount_only__raw,2423,0.8836
+structural,iforest__amount_only__robust,2423,0.222
+structural,iforest__full__log,2423,0.2142
+structural,iforest__full__raw,2423,0.7825
+structural,iforest__full__robust,2423,0.2456
+structural,iforest__full_categorical__robust **,2371,0.2434
+structural,knn__amount_cents__robust,2423,0.5188
+structural,knn__amount_only__log,2423,0.2489
+structural,knn__full__robust,2423,0.863
+structural,knn__full_categorical__robust **,2371,0.48
+structural,lof__amount_cents__robust,2423,0.3586
+structural,lof__amount_only__log,2423,0.4887
+structural,lof__full__robust,2423,0.3083
+structural,lof__full_categorical__robust **,2371,0.3269
+structural,mcd__amount_cents__robust,2423,0.2229
+structural,mcd__full__robust,2423,0.0454
+structural,ocsvm__amount_cents__robust,2423,0.1696
+structural,ocsvm__amount_only__robust,2423,0.5241
+structural,ocsvm__full__robust,2423,0.4936
+structural,repeat__amount_only__raw,2423,0.5774
+structural,round__amount_only__raw,2423,0.936

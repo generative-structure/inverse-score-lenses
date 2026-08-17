@@ -1,0 +1,13 @@
+representation,stratum,instances,H_plant_bits,mean_CE_bits,I_within_stratum,accuracy
+autopsy_mix,aligned,9840,2.1,2.579,-0.479,0.2176
+autopsy_mix,non_aligned,5760,1.895,3.174,-1.278,0.0094
+autopsy_mix,null_populations,16200,-0.0,0.899,-0.899,0.9873
+autopsy_mix,ensemble,600,2.322,2.361,-0.039,0.26
+structural,aligned,9840,2.1,2.025,0.075,0.3786
+structural,non_aligned,5760,1.895,3.034,-1.139,0.0302
+structural,null_populations,16200,-0.0,0.772,-0.772,0.9943
+structural,ensemble,600,2.322,2.024,0.298,0.365
+overlap_profile,aligned,9840,2.1,2.871,-0.771,0.1865
+overlap_profile,non_aligned,5760,1.895,3.325,-1.43,0.0005
+overlap_profile,null_populations,16200,-0.0,0.929,-0.929,0.981
+overlap_profile,ensemble,600,2.322,2.645,-0.323,0.2583

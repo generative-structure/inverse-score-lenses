@@ -1,0 +1,4 @@
+section,representation,L_population_only,L_worklist_and_population,delta_W_given_X
+Q,autopsy_mix,4.7548,2.6448,2.11
+Q,structural,4.7548,2.5949,2.16
+Q,overlap_profile,4.7548,1.6821,3.0727

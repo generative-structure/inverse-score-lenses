@@ -1,0 +1,7 @@
+representation,model,accuracy,baseline,margin,x_baseline
+autopsy_mix,logistic,0.6727,0.3182,0.3545,2.11
+autopsy_mix,random_forest,0.8286,0.3182,0.5104,2.6
+structural,logistic,0.6158,0.3182,0.2976,1.94
+structural,random_forest,0.8727,0.3182,0.5545,2.74
+overlap_profile,logistic,0.9613,0.3182,0.6431,3.02
+overlap_profile,random_forest,0.9859,0.3182,0.6677,3.1

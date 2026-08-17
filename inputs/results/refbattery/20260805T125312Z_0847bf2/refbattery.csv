@@ -1,0 +1,5 @@
+arm,representation,model,n_rows,n_classes,accuracy,I_bits,H_bits,primary
+sid,reference_battery_27,logistic,32400,27,0.9776,4.697,4.7549,True
+sid,reference_battery_27,random_forest,32400,27,0.9777,3.494,4.7549,False
+rid,reference_battery_27,logistic,65161,27,0.9705,4.677,4.7548,True
+rid,reference_battery_27,random_forest,65161,27,0.9707,3.313,4.7548,False

@@ -1,0 +1,13 @@
+section,source,task,representation,model,accuracy,ci_lo,ci_hi,macro_accuracy
+B,oof_A_family_autopsy_mix_logistic,family,autopsy_mix,logistic,0.4879,0.4507,0.5054,0.4415
+B,oof_A_family_autopsy_mix_random_forest,family,autopsy_mix,random_forest,0.5979,0.5414,0.6206,0.5425
+B,oof_A_family_overlap_profile_logistic,family,overlap_profile,logistic,0.8131,0.7928,0.8274,0.7884
+B,oof_A_family_overlap_profile_random_forest,family,overlap_profile,random_forest,0.8922,0.8662,0.9021,0.8592
+B,oof_A_family_structural_logistic,family,structural,logistic,0.4859,0.438,0.511,0.4608
+B,oof_A_family_structural_random_forest,family,structural,random_forest,0.6141,0.5398,0.6529,0.5559
+B,oof_A_spec_autopsy_mix_logistic,spec,autopsy_mix,logistic,0.3678,0.3106,0.402,0.3117
+B,oof_A_spec_autopsy_mix_random_forest,spec,autopsy_mix,random_forest,0.4491,0.3908,0.478,0.3881
+B,oof_A_spec_overlap_profile_logistic,spec,overlap_profile,logistic,0.6209,0.5602,0.6518,0.5536
+B,oof_A_spec_overlap_profile_random_forest,spec,overlap_profile,random_forest,0.6895,0.6189,0.7161,0.6162
+B,oof_A_spec_structural_logistic,spec,structural,logistic,0.3248,0.2862,0.3417,0.289
+B,oof_A_spec_structural_random_forest,spec,structural,random_forest,0.4337,0.3618,0.4602,0.3774

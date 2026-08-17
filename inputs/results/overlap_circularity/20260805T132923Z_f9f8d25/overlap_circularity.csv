@@ -1,0 +1,17 @@
+arm,representation,model,accuracy,I_bits,width,j_self_min,j_self_max,primary
+sid,aligned26,logistic,0.8941,4.306,26,1.0,1.0,True
+sid,aligned26,random_forest,0.9119,4.071,26,1.0,1.0,False
+sid,sorted26,logistic,0.3523,1.772,26,1.0,1.0,False
+sid,sorted26,random_forest,0.4813,2.49,26,1.0,1.0,True
+sid,fixed27,logistic,0.9776,4.697,27,1.0,1.0,True
+sid,fixed27,random_forest,0.9777,3.494,27,1.0,1.0,False
+sid,synthetic,logistic,1.0,4.752,26,1.0,1.0,False
+sid,synthetic,random_forest,1.0,4.753,26,1.0,1.0,True
+rid,aligned26,logistic,0.6233,3.047,26,1.0,1.0,False
+rid,aligned26,random_forest,0.6946,3.093,26,1.0,1.0,True
+rid,sorted26,logistic,0.1794,0.892,26,1.0,1.0,False
+rid,sorted26,random_forest,0.2333,1.292,26,1.0,1.0,True
+rid,fixed27,logistic,0.9705,4.677,27,1.0,1.0,True
+rid,fixed27,random_forest,0.9707,3.313,27,1.0,1.0,False
+rid,synthetic,logistic,1.0,4.752,26,1.0,1.0,False
+rid,synthetic,random_forest,1.0,4.754,26,1.0,1.0,True

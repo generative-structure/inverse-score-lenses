@@ -1,0 +1,213 @@
+# S-ID frozen analysis configuration.
+#
+# Declared at seal time as required by PROTOCOL.md §5. This file fixes
+# every model hyperparameter, cross-validation scheme, seed, and
+# preprocessing decision BEFORE any S-ID substrate exists, so that no
+# choice below can be made after seeing a result. It is committed in the
+# same commit as PROTOCOL.sha256 and contains no analysis code.
+#
+# Environment at declaration: Python 3.14.2, scikit-learn 1.8.0,
+# numpy 2.4.2, scipy 1.17.1, pandas 3.0.1 (config/env_m5_freeze.txt).
+# NOTE: scikit-learn 1.8 removed LogisticRegression's `multi_class`
+# argument; solver=lbfgs is multinomial for multiclass targets by
+# default, which is the intended behaviour of PROTOCOL.md §5.
+
+protocol_version: "1.1"
+
+# ---------------------------------------------------------------------
+# Substrate (PROTOCOL.md §3) — restated here for the generator's use.
+# ---------------------------------------------------------------------
+substrate:
+  seed_root: s-id-v1          # disjoint from every score-lenses root
+  n_records: 5000             # N per population
+  epsilon: 0.01               # where applicable
+  k: 50                       # top-K worklist length
+  hosts: [default, rule_sparse, heavy_round]
+  populations:
+    null_total: 600           # 200 per host
+    planted_per_type: 120     # 40 per host per type
+    planted_types: [MAG, RULE, BUNCH, COPY, MIXED]
+  # 1,200 populations x 27 specifications = 32,400 worklists
+  expected_worklists: 32400
+
+# ---------------------------------------------------------------------
+# Specification bins (PROTOCOL.md §4). The 27 = 26 frozen grid cells +
+# ensemble_meanrank. Only the `learned` bin is headlined.
+# ---------------------------------------------------------------------
+bins:
+  learned:                    # 22 cells, 6 algorithm families
+    - iforest__full__robust
+    - iforest__full__log
+    - iforest__full__raw
+    - iforest__amount_only__robust
+    - iforest__amount_only__raw
+    - iforest__amount_cents__robust
+    - iforest__full_categorical__robust
+    - lof__full__robust
+    - lof__amount_cents__robust
+    - lof__amount_only__log
+    - lof__full_categorical__robust
+    - knn__full__robust
+    - knn__amount_cents__robust
+    - knn__amount_only__log
+    - knn__full_categorical__robust
+    - ocsvm__full__robust
+    - ocsvm__amount_cents__robust
+    - ocsvm__amount_only__robust
+    - mcd__amount_cents__robust
+    - mcd__full__robust
+    - ae__full__robust
+    - ae__full_categorical__robust
+  rule_based:                 # 4 cells; identifiable partly by construction
+    - benford__amount_only__raw
+    - round__amount_only__raw
+    - repeat__amount_only__raw
+    - dup_pair__full_categorical__raw
+  ensemble:                   # deterministic function of the other 26
+    - ensemble_meanrank
+
+# Algorithm families for Task A-family. Cell counts are unbalanced, so
+# the baseline is the majority-class rate, NOT 1/6.
+families:
+  iforest: 7
+  lof: 4
+  knn: 4
+  ocsvm: 3
+  mcd: 2
+  autoencoder: 2
+family_majority_class_baseline: 0.3182   # 7/22
+
+# ---------------------------------------------------------------------
+# Tasks and cross-validation (PROTOCOL.md §5). Task B2's scheme differs
+# by necessity and is not comparable to A/A-family/B1.
+# ---------------------------------------------------------------------
+cv:
+  seed: 20260726                # fold assignment only; fixed here, never varied
+  task_a:
+    target: spec_name
+    n_classes: 27
+    chance: 0.037037            # 1/27, balanced by construction
+    scheme: grouped_kfold_by_population
+    n_folds: 5
+    secondary_scheme: leave_one_host_out    # 3 folds, one per host
+  task_a_family:
+    target: algorithm
+    restricted_to_bin: learned
+    n_classes: 6
+    baseline: 0.3182            # majority class 7/22 — the stated chance
+    scheme: grouped_kfold_by_population
+    n_folds: 5
+  task_b1:                      # co-primary dissociation target
+    target: plant_condition
+    n_classes: 6
+    class_marginals: {NULL: 0.50, MAG: 0.10, RULE: 0.10, BUNCH: 0.10,
+                      COPY: 0.10, MIXED: 0.10}
+    entropy_bits: 2.1610        # H(plant) under the §3 design
+    baseline: 0.500             # majority class = NULL
+    scheme: grouped_kfold_by_population   # identical to Task A
+    n_folds: 5
+    balanced_variant:           # reported alongside, never substituted
+      subsample_null_to: 120
+      entropy_bits: 2.5850      # log2(6)
+      baseline: 0.1667
+  task_b2:                      # secondary; floor-calibrated only
+    target: population_id
+    n_classes: 1200
+    entropy_bits: 10.2288       # log2(1200)
+    chance: 0.000833
+    scheme: stratified_within_population
+    n_folds: 3                  # 18 train / 9 test of each population's 27
+    comparable_to_task_a: false
+
+# Estimator-floor calibration (PROTOCOL.md §6). Null targets computed
+# through the identical pipeline; their MI is the "nothing to recover"
+# reference, not a measure of population information.
+floors:
+  floor_27:
+    construction: seeded_random_27way_partition_of_populations
+    seed: 20260726001
+    scheme: grouped_kfold_by_population
+    purpose: estimator calibration at Task A's cardinality and instances
+  floor_pop:
+    construction: permuted_population_id_labels
+    seed: 20260726002
+    scheme: stratified_within_population
+    purpose: estimator calibration at Task B2's cardinality and instances
+
+# ---------------------------------------------------------------------
+# Models (PROTOCOL.md §5). Both models are run on every task and every
+# feature representation. No search, no tuning on test folds.
+# ---------------------------------------------------------------------
+models:
+  logistic:
+    estimator: sklearn.linear_model.LogisticRegression
+    params:
+      solver: lbfgs             # multinomial for multiclass in sklearn 1.8
+      C: 1.0
+      penalty: l2
+      max_iter: 2000            # raised from the 100 default for convergence
+      tol: 0.0001
+      class_weight: null
+      fit_intercept: true
+      random_state: 20260726
+    standardize: true           # StandardScaler, FIT ON TRAINING FOLDS ONLY
+  random_forest:
+    estimator: sklearn.ensemble.RandomForestClassifier
+    params:
+      n_estimators: 300
+      max_depth: 12             # "small" per §5
+      min_samples_leaf: 5
+      max_features: sqrt
+      bootstrap: true
+      class_weight: null
+      random_state: 20260726
+      n_jobs: 1                 # pinned; see threads below
+    standardize: false          # scale-invariant; declared, not omitted
+
+preprocessing:
+  standardize_fit_scope: train_folds_only   # leakage decision, declared pre-seal
+  impute: none                              # features are complete by construction
+  feature_representations: [autopsy_mix, structural, overlap_profile]
+  pooled: false                             # §4: reported separately, never pooled
+
+# ---------------------------------------------------------------------
+# Mutual information and uncertainty (PROTOCOL.md §6).
+# ---------------------------------------------------------------------
+mutual_information:
+  estimator: plugin_from_out_of_fold_cross_entropy
+  # I(T;F) = H(T) - H(T|F); H(T|F) = mean out-of-fold cross-entropy in
+  # bits. This is an UPPER bound on H(T|F), hence a LOWER bound on I.
+  log_base: 2
+  h_spec_bits: 4.7549           # log2(27)
+  headline: normalized_ratio_spec_vs_plant   # the binding comparison (P3c)
+
+  # Committed reporting requirement (PROTOCOL.md §6): I(plant;F) is never
+  # reported as a single number. It is decomposed over aligned vs
+  # non-aligned (specification, plant) pairs under the frozen relation
+  # A(g, p) in config/frozen_config.yaml. NULL populations and
+  # ensemble_meanrank are held out as their own strata, not folded into
+  # "non-aligned": the frozen relation gives NULL an empty perturbation
+  # set, and it excludes the ensemble (no geometry class).
+  plant_decomposition:
+    required: true
+    relation: config/frozen_config.yaml#alignment
+    strata: [aligned, non_aligned, null_populations, ensemble]
+    conditional_on_outcome: false   # reported whether P3 holds or fails
+
+bootstrap:
+  n_resamples: 2000
+  unit: population              # resample populations with replacement
+  refit_classifiers: false      # resample stored OOF predictive distributions
+  ci: 0.95
+  seed: 20260726003
+
+# ---------------------------------------------------------------------
+# Execution discipline.
+# ---------------------------------------------------------------------
+execution:
+  results_root: results/sid
+  respect_runlock: true         # never generate substrate while .runlock is held
+  thread_pins:                  # recorded as a property of the run, never a default
+    OMP_NUM_THREADS: 1
+    VECLIB_MAXIMUM_THREADS: 1
+  determinism_probe: true       # run and log before substrate generation

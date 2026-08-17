@@ -1,0 +1,21 @@
+section,arm,representation,accuracy,I_bits,floored
+D,isotonic (nested),autopsy_mix,0.4502,2.251,27
+D,gradient boosting,autopsy_mix,0.4634,2.354,0
+D,learning curve 0.05,autopsy_mix,0.3997,,0
+D,learning curve 0.10,autopsy_mix,0.4168,,0
+D,learning curve 0.25,autopsy_mix,0.433,,0
+D,learning curve 0.50,autopsy_mix,0.4431,,0
+D,learning curve 0.75,autopsy_mix,0.4473,,0
+D,learning curve 1.00,autopsy_mix,0.4492,,0
+D,isotonic (nested),structural,0.4332,2.227,10
+D,gradient boosting,structural,0.4433,2.296,0
+D,learning curve 0.05,structural,0.3708,,0
+D,learning curve 0.10,structural,0.3928,,0
+D,learning curve 0.25,structural,0.413,,0
+D,learning curve 0.50,structural,0.4254,,0
+D,learning curve 0.75,structural,0.4306,,0
+D,learning curve 1.00,structural,0.4337,,0
+D,prior: empirical H(S),autopsy_mix,,2.11,0
+D,prior: uniform log2(27),autopsy_mix,,2.11,0
+D,prior: empirical H(S),structural,,2.16,0
+D,prior: uniform log2(27),structural,,2.16,0

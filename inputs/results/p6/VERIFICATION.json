@@ -1,0 +1,127 @@
+{
+  "populations_checked": [
+    {
+      "population_id": 0,
+      "host": "default",
+      "plant": "NULL",
+      "rep": 0,
+      "n_records": 5000,
+      "n_plant_records": 50,
+      "bit_exact": true
+    },
+    {
+      "population_id": 69,
+      "host": "default",
+      "plant": "NULL",
+      "rep": 69,
+      "n_records": 5000,
+      "n_plant_records": 50,
+      "bit_exact": true
+    },
+    {
+      "population_id": 187,
+      "host": "default",
+      "plant": "NULL",
+      "rep": 187,
+      "n_records": 5000,
+      "n_plant_records": 50,
+      "bit_exact": true
+    },
+    {
+      "population_id": 289,
+      "host": "default",
+      "plant": "BUNCH",
+      "rep": 9,
+      "n_records": 5000,
+      "n_plant_records": 50,
+      "bit_exact": true
+    },
+    {
+      "population_id": 377,
+      "host": "default",
+      "plant": "MIXED",
+      "rep": 17,
+      "n_records": 5000,
+      "n_plant_records": 50,
+      "bit_exact": true
+    },
+    {
+      "population_id": 552,
+      "host": "rule_sparse",
+      "plant": "NULL",
+      "rep": 152,
+      "n_records": 5000,
+      "n_plant_records": 50,
+      "bit_exact": true
+    },
+    {
+      "population_id": 692,
+      "host": "rule_sparse",
+      "plant": "BUNCH",
+      "rep": 12,
+      "n_records": 5000,
+      "n_plant_records": 50,
+      "bit_exact": true
+    },
+    {
+      "population_id": 748,
+      "host": "rule_sparse",
+      "plant": "COPY",
+      "rep": 28,
+      "n_records": 5000,
+      "n_plant_records": 50,
+      "bit_exact": true
+    },
+    {
+      "population_id": 845,
+      "host": "heavy_round",
+      "plant": "NULL",
+      "rep": 45,
+      "n_records": 5000,
+      "n_plant_records": 50,
+      "bit_exact": true
+    },
+    {
+      "population_id": 874,
+      "host": "heavy_round",
+      "plant": "NULL",
+      "rep": 74,
+      "n_records": 5000,
+      "n_plant_records": 50,
+      "bit_exact": true
+    },
+    {
+      "population_id": 1166,
+      "host": "heavy_round",
+      "plant": "MIXED",
+      "rep": 6,
+      "n_records": 5000,
+      "n_plant_records": 50,
+      "bit_exact": true
+    },
+    {
+      "population_id": 1199,
+      "host": "heavy_round",
+      "plant": "MIXED",
+      "rep": 39,
+      "n_records": 5000,
+      "n_plant_records": 50,
+      "bit_exact": true
+    }
+  ],
+  "n_feature_columns": 49,
+  "mismatches": [],
+  "rtol": 0.0,
+  "atol": 0.0,
+  "all_bit_exact": true,
+  "stored_substrate": "results/sid/20260726T172824Z_c093730/worklists.parquet",
+  "elapsed_s": 26.4,
+  "full_substrate_check": {
+    "rows": 32400,
+    "feature_columns": 49,
+    "columns_differing": 0,
+    "full_substrate_bit_exact": true,
+    "rtol": 0.0,
+    "atol": 0.0
+  }
+}

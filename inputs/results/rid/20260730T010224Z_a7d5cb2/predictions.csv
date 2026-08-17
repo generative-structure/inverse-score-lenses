@@ -1,0 +1,9 @@
+prediction,clause,observed,verdict
+P-R-A [autopsy_mix],band per sealed scale,27c 0.4520 / fam 0.6012,moderate / strong
+P-R-A [structural],band per sealed scale,27c 0.4368 / fam 0.6181,moderate / strong
+P-R-A-LOCO,"LOCO/grouped ratio < S-ID LOHO (0.659 autopsy_mix / 0.672 structural), committed direction",autopsy_mix/logistic 0.951 vs 0.659; autopsy_mix/random_forest 0.924 vs 0.659; structural/logistic 0.946 vs 0.672; structural/random_forest 0.869 vs 0.672,DEFEATED — retention at/above synthetic (the informative direction)
+P-R-GAP,"gap grouped−LOCO positive and substantial on both headlined representations (direction committed, magnitude not)","autopsy_mix/logistic 0.0180 [0.0081, 0.0262]; autopsy_mix/random_forest 0.0344 [0.0218, 0.0449]; structural/logistic 0.0176 [0.0080, 0.0229]; structural/random_forest 0.0571 [0.0290, 0.0760]",PASS
+P-R-B (levels),I(S;F) >= 1.5 bits on both headlined representations,autopsy_mix 2.137; structural 2.200,PASS
+"P-R-B (normalized, binding)","I(S;F)/H(S) >= 1.5 x I(corpus;F)/H(corpus), declared constants",autopsy_mix ratio 2.9; structural ratio 2.7,PASS
+P-R-C,"precision >= 0.50 per corpus, |C| >= 3 required",0 PASS / 0 FAIL / 12 not evaluable of 12,see per-corpus table
+P-R-D,structural >= 0.90 x autopsy_mix (Task A),"ratios [0.889, 0.966]",FAIL

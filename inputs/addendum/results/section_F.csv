@@ -1,0 +1,13 @@
+section,study,mixture,classes,representation,model,accuracy
+F,S-ID,pooled,22,autopsy_mix,logistic,0.6715
+F,S-ID,pooled,22,autopsy_mix,random_forest,0.7523
+F,S-ID,pooled,22,structural,logistic,0.6804
+F,S-ID,pooled,22,structural,random_forest,0.7995
+F,S-ID,pooled,22,overlap_profile,logistic,0.9059
+F,S-ID,pooled,22,overlap_profile,random_forest,0.9195
+F,R-ID,all units,22,autopsy_mix,logistic,0.3458
+F,R-ID,all units,22,autopsy_mix,random_forest,0.4461
+F,R-ID,all units,22,structural,logistic,0.2939
+F,R-ID,all units,22,structural,random_forest,0.4238
+F,R-ID,all units,22,overlap_profile,logistic,0.6393
+F,R-ID,all units,22,overlap_profile,random_forest,0.6961

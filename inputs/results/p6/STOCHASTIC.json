@@ -1,0 +1,41 @@
+{
+  "probe_populations": [
+    0,
+    400,
+    845
+  ],
+  "criterion": "scores or top-50 membership change when only the seed changes",
+  "stochastic": [
+    "ae__full__robust",
+    "ae__full_categorical__robust",
+    "ensemble_meanrank",
+    "iforest__amount_cents__robust",
+    "iforest__amount_only__raw",
+    "iforest__amount_only__robust",
+    "iforest__full__log",
+    "iforest__full__raw",
+    "iforest__full__robust",
+    "iforest__full_categorical__robust",
+    "mcd__amount_cents__robust",
+    "mcd__full__robust"
+  ],
+  "deterministic": [
+    "benford__amount_only__raw",
+    "dup_pair__full_categorical__raw",
+    "knn__amount_cents__robust",
+    "knn__amount_only__log",
+    "knn__full__robust",
+    "knn__full_categorical__robust",
+    "lof__amount_cents__robust",
+    "lof__amount_only__log",
+    "lof__full__robust",
+    "lof__full_categorical__robust",
+    "ocsvm__amount_cents__robust",
+    "ocsvm__amount_only__robust",
+    "ocsvm__full__robust",
+    "repeat__amount_only__raw",
+    "round__amount_only__raw"
+  ],
+  "n_stochastic": 12,
+  "n_deterministic": 15
+}

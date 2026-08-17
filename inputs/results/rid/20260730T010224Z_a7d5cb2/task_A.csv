@@ -1,0 +1,7 @@
+representation,model,accuracy,lift_over_chance,learned,rule_based,ensemble,I_bits,CI
+autopsy_mix,logistic,0.3673,9.9,0.3165,0.6567,0.3293,1.795,"[1.363, 1.970]"
+autopsy_mix,random_forest,0.452,12.2,0.4087,0.6606,0.572,2.137,"[1.881, 2.245]"
+structural,logistic,0.3267,8.8,0.2586,0.6623,0.4829,1.625,"[1.209, 1.778]"
+structural,random_forest,0.4368,11.8,0.3778,0.7228,0.5902,2.2,"[1.883, 2.331]"
+overlap_profile,logistic,0.6233,16.8,0.6056,0.73,0.5848,3.047,"[2.779, 3.189]"
+overlap_profile,random_forest,0.6946,18.8,0.6655,0.8367,0.7648,3.093,"[2.868, 3.174]"

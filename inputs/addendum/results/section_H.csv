@@ -1,0 +1,13 @@
+section,task,family,accuracy,note
+H,LOSO-family,autoencoder,,well-posed; held-out family has no training examples of its own label
+H,LOSO-family,iforest,,NOT WELL-POSED: 3 path(s) in no other family
+H,LOSO-family,knn,,well-posed; held-out family has no training examples of its own label
+H,LOSO-family,lof,,well-posed; held-out family has no training examples of its own label
+H,LOSO-family,mcd,,well-posed; held-out family has no training examples of its own label
+H,LOSO-family,ocsvm,,well-posed; held-out family has no training examples of its own label
+H,multitask:algorithm,autopsy_mix,0.5979,"majority baseline 0.3184, 6 classes"
+H,multitask:algorithm,structural,0.6141,"majority baseline 0.3184, 6 classes"
+H,multitask:basis,autopsy_mix,0.6846,"majority baseline 0.3651, 4 classes"
+H,multitask:basis,structural,0.6419,"majority baseline 0.3651, 4 classes"
+H,multitask:transform,autopsy_mix,0.8376,"majority baseline 0.7718, 3 classes"
+H,multitask:transform,structural,0.832,"majority baseline 0.7718, 3 classes"

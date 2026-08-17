@@ -1,0 +1,7 @@
+representation,model,acc_all27,acc_learned22
+autopsy_mix,logistic,0.7256,0.6835
+autopsy_mix,random_forest,0.7909,0.7507
+structural,logistic,0.7139,0.6748
+structural,random_forest,0.82,0.7884
+overlap_profile,logistic,0.9076,0.9048
+overlap_profile,random_forest,0.9229,0.9186
